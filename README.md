@@ -1,5 +1,5 @@
 # Group 20 (C2) - COS30045 Data Visualisation Project (2026)
-*This was the previous carry-forward and make a changes to turn into Dashboard
+*This was the previous carry-forward and make a changes to turn into Dashboard, previous website will be private and this repo will be the finalize
 ## Hospitalised Injuries from Road Crashes in Australia (2011–2021)
 
 ### Project Overview
