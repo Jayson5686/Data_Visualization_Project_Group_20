@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Definitions, data sources, and interpretation notes for the CrashMetrics Australia dashboard.">
+  <title>Glossary & Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/glossary.css">
+</head>
+<body class="glossary-body">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="glossary-page">
+    <header class="glossary-header">
+      <a href="index.html" class="glossary-dashboard-link">CrashMetrics Australia <span>Dashboard</span></a>
+      <h1>Glossary</h1>
+      <p>Data definitions, sources, and notes for interpreting the charts.</p>
+    </header>
+
+    <nav class="glossary-nav" aria-label="Primary Navigation">
+      <a href="index.html"> Dashboard</a>
+      <a href="glossary.html" aria-current="page">Glossary</a>
+    </nav>
+
+    <main id="main-content" class="glossary-content" tabindex="-1">
+      <section class="glossary-introduction" aria-labelledby="glossary-intro-title">
+        <h2 id="glossary-intro-title">About these figures</h2>
+        <p>This dashboard presents hospitalised injuries in Australia where the cause was a road crash. It uses prepared annual data from the Australian Institute of Health and Welfare (AIHW) National Hospital Morbidity Database (NHMD), covering 2011–2021.</p>
+      </section>
+
+      <div class="glossary-columns">
+        <div class="glossary-column">
+          <section class="glossary-group glossary-group-teal" aria-labelledby="glossary-measures-title">
+            <h2 id="glossary-measures-title">Measures</h2>
+            <dl>
+              <div>
+                <dt>Hospitalised injury</dt>
+                <dd>An injury resulting in a person being admitted to hospital and later discharged alive, either on the same day or after one or more nights. Deaths are excluded, and transfers between hospitals are counted once. Injury circumstances are coded using the ICD-10-AM classification.</dd>
+              </div>
+              <div>
+                <dt>Hospitalisations (admissions)</dt>
+                <dd>The number of hospital admissions in the dataset. These are recorded counts, not a count of all crashes or all injured people.</dd>
+              </div>
+              <div>
+                <dt>Bed days</dt>
+                <dd>Inpatient days associated with hospitalisations. Average length of stay is calculated from patient days divided by injury cases. Internal and external transfers are excluded from the bed-day calculation.</dd>
+              </div>
+              <div>
+                <dt>Age group</dt>
+                <dd>The patient age bands supplied in the annual datasets. For the First Nations breakdown, older age groups are consolidated into a single 65+ category.</dd>
+              </div>
+              <div>
+                <dt>Sex</dt>
+                <dd>The recorded sex of the road user. The “unknown” category also includes cases where sex was intersex or indeterminate.</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="glossary-acknowledgements" aria-labelledby="acknowledgements-title">
+            <h2 id="acknowledgements-title">Acknowledgements</h2>
+            <p>The Department of Infrastructure, Transport, Regional Development, Communications and the Arts acknowledges the provision of custom data by the Australian Institute of Health and Welfare from the <a href="https://www.aihw.gov.au/about-our-data/our-data-collections/national-hospital-morbidity-database" target="_blank" rel="noopener noreferrer">National Hospital Morbidity Database</a>.</p>
+            <p>Population data was provided by the Australian Bureau of Statistics as a custom data request (as at April 2023).</p>
+          </section>
+        </div>
+
+        <div class="glossary-column">
+          <section class="glossary-group glossary-group-navy" aria-labelledby="glossary-groups-title">
+            <h2 id="glossary-groups-title">Categories</h2>
+            <dl>
+              <div>
+                <dt>Road user</dt>
+                <dd>The injured person’s role at the time of injury (for example, driver, passenger, motorcyclist, or pedestrian), determined using ICD-10-AM external-cause coding. Some vehicle occupants cannot be distinguished and are coded as “Driver/Passenger”.</dd>
+              </div>
+              <div>
+                <dt>Remoteness area</dt>
+                <dd>Based on the Australian Bureau of Statistics <a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/remoteness-structure" target="_blank" rel="noopener noreferrer">Australian Statistical Geography Standard (ASGS)</a>, using the patient’s usual residence:
+                  <ul>
+                    <li><strong>Major cities:</strong> areas defined by the ABS, excluding Darwin and Hobart in this analysis.</li>
+                    <li><strong>Regional:</strong> inner regional and outer regional areas.</li>
+                    <li><strong>Remote:</strong> remote and very remote areas.</li>
+                    <li><strong>Other or unknown:</strong> residence was unrecorded or was migratory/offshore.</li>
+                  </ul>
+                </dd>
+              </div>
+              <div>
+                <dt>Counterparty</dt>
+                <dd>The vehicle or object that contributed to the injury event.</dd>
+              </div>
+              <div>
+                <dt>n.p. (not published)</dt>
+                <dd>A small count suppressed to protect patient confidentiality. A hatched mark indicates a suppressed value; it is not zero.</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="glossary-notes" aria-labelledby="glossary-notes-title">
+            <h2 id="glossary-notes-title">Notes and interpretation</h2>
+            <ol>
+              <li>From calendar year 2012, Victoria’s data is not directly comparable with previous years because emergency department-only cases were excluded from 1 July 2012. A similar change occurred in New South Wales from June 2017.</li>
+              <li>Unknown or other values are excluded when calculating rates by age group, remoteness, or sex.</li>
+              <li>Data is subject to revision. See the <a href="https://www.infrastructure.gov.au/department/media/publications/disclaimer" target="_blank" rel="noopener noreferrer">departmental disclaimer</a>.</li>
+              <li>These figures are counts, not population-adjusted rates; differences between places may reflect population size as well as underlying patterns.</li>
+            </ol>
+          </section>
+
+          <section class="glossary-download" aria-labelledby="glossary-download-title">
+            <div>
+              <h2 id="glossary-download-title">Datasets</h2>
+            </div>
+            <a class="utility-btn" href="data/datasets.zip" download="datasets.zip">Download datasets (.ZIP)</a>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="glossary-footer">
+      <span>CrashMetrics Australia · COS30045 Data Visualisation · 2011–2021</span>
+      <a href="index.html">Back to dashboard</a>
+    </footer>
+  </div>
+</body>
+</html>
