@@ -1,0 +1,321 @@
+:root {
+  --bg-page-outer: #e2e8f0;
+  --bg-shell: #f1f5f9;
+  --bg-card-white: #ffffff;
+  --bg-card-recessed: #f8fafc;
+  --border-light: #e2e8f0;
+  --border-subtle: #e9eef4;
+  --ink-primary: #14171a;
+  --ink-secondary: #525866;
+  --ink-muted: #687386;
+  --accent-emerald: #087f5b;
+  --accent-slate: #334155;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --radius-outer: 24px;
+  --radius-card: 16px;
+  --radius-inner: 12px;
+  --shadow-elevated: 0 20px 48px -12px rgba(20, 23, 26, 0.18), 0 4px 12px -2px rgba(20, 23, 26, 0.06);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg-page-outer);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.glossary-body {
+  min-height: 100vh;
+  margin: 0;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  background: linear-gradient(180deg, #dce3eb 0%, #f1f5f9 52%, #e2e8f0 100%);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 10;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.7rem 1rem;
+  transform: translateY(calc(-100% - 1rem));
+  border-radius: 0.5rem;
+  background: var(--bg-card-white);
+  color: var(--ink-primary);
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.glossary-body {
+  overflow-x: hidden;
+}
+
+.glossary-page {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--bg-card-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-outer);
+  box-shadow: var(--shadow-elevated);
+}
+
+.glossary-header {
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  background:
+    radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.15), transparent 35%),
+    var(--bg-shell);
+}
+
+.glossary-dashboard-link {
+  display: inline-flex;
+  gap: 0.45rem;
+  margin-bottom: 2rem;
+  color: var(--ink-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.glossary-dashboard-link span {
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.glossary-header h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.glossary-header > p {
+  margin-top: 0.75rem;
+  color: var(--ink-secondary);
+  font-size: 1rem;
+}
+
+.glossary-nav {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.85rem clamp(1.5rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.glossary-nav a {
+  color: var(--ink-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.glossary-nav a:hover,
+.glossary-nav a[aria-current="page"] {
+  color: var(--accent-emerald);
+}
+
+.glossary-content {
+  padding: clamp(1.25rem, 4vw, 2.75rem);
+}
+
+.glossary-introduction {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: var(--radius-inner);
+  background: var(--bg-card-recessed);
+}
+
+.glossary-introduction h2,
+.glossary-group h2,
+.glossary-acknowledgements h2,
+.glossary-notes h2,
+.glossary-download h2 {
+  margin-bottom: 0.8rem;
+  color: var(--ink-primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.glossary-introduction p,
+.glossary-acknowledgements p,
+.glossary-group dd,
+.glossary-notes li,
+.glossary-download p {
+  color: var(--ink-secondary);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.glossary-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.glossary-column {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.glossary-group,
+.glossary-acknowledgements,
+.glossary-notes,
+.glossary-download {
+  padding: 1.35rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--bg-card-white);
+}
+
+.glossary-group-teal {
+  border-top: 3px solid var(--accent-emerald);
+}
+
+.glossary-group-navy {
+  border-top: 3px solid var(--accent-slate);
+}
+
+.glossary-group dl {
+  display: grid;
+  gap: 1rem;
+}
+
+.glossary-group dl > div {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.glossary-group dl > div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.glossary-group dt {
+  margin-bottom: 0.25rem;
+  color: var(--ink-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.glossary-group dd ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.55rem 0 0 1.1rem;
+}
+
+.glossary-group a,
+.glossary-acknowledgements a,
+.glossary-notes a {
+  color: var(--accent-emerald);
+  text-underline-offset: 0.15em;
+}
+
+.glossary-acknowledgements p + p {
+  margin-top: 0.65rem;
+}
+
+.glossary-notes ol {
+  display: grid;
+  gap: 0.65rem;
+  padding-left: 1.25rem;
+}
+
+.glossary-download {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-card-recessed);
+}
+
+.glossary-download h2 {
+  margin-bottom: 0.2rem;
+}
+
+.glossary-download .utility-btn {
+  flex: 0 0 auto;
+  text-align: center;
+  text-decoration: none;
+}
+
+.glossary-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1.5rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--border-light);
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+}
+
+.glossary-footer a {
+  color: var(--ink-secondary);
+  text-decoration: none;
+}
+
+.glossary-footer a:hover {
+  color: var(--ink-primary);
+  text-decoration: underline;
+}
+
+.utility-btn {
+  display: inline-block;
+  padding: 0.65rem 0.95rem;
+  border: 1px solid var(--border-light);
+  border-radius: 9999px;
+  background: var(--bg-card-white);
+  color: var(--ink-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.utility-btn:hover {
+  background: var(--bg-shell);
+}
+
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .glossary-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .glossary-page {
+    border-radius: var(--radius-card);
+  }
+}
+
+@media (max-width: 480px) {
+  .glossary-nav {
+    gap: 1rem;
+  }
+
+  .glossary-download,
+  .glossary-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

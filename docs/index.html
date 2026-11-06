@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitalised Injuries from Road Crashes in Australia (2011–2021)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="container header-flex">
+            <div>
+                <h1>Hospitalised Injuries from Road Crashes</h1>
+                <p class="subtitle">Australian Road Traffic Hospitalisations (2011–2021)</p>
+            </div>
+            <div class="header-year">
+                <span id="active-year-label">2011–2021</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-bar">
+        <div class="container">
+            <div class="tabs" role="tablist">
+                <button class="tab-btn active" data-view="overview" role="tab">State &amp; National Trends</button>
+                <button class="tab-btn" data-view="demographics" role="tab">Demographics &amp; Road Users</button>
+                <button class="tab-btn" data-view="first-nations" role="tab">First Nations Insights</button>
+                <a class="tab-btn" href="glossary.html">Glossary &amp; Notes</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global Filter Bar (Clean: Only Year, State, Metric, Reset) -->
+    <section class="filter-bar">
+        <div class="container filter-grid">
+            <div class="filter-field">
+                <label for="filter-year">Year</label>
+                <select id="filter-year">
+                    <option value="All" selected>All Years (2011–2021)</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                    <option value="2012">2012</option>
+                    <option value="2011">2011</option>
+                </select>
+            </div>
+
+            <div class="filter-field" id="field-state">
+                <label for="filter-state">State / Territory</label>
+                <select id="filter-state">
+                    <option value="All" selected>All Australia</option>
+                    <option value="NSW">NSW</option>
+                    <option value="Vic">Vic</option>
+                    <option value="Qld">Qld</option>
+                    <option value="WA">WA</option>
+                    <option value="SA">SA</option>
+                    <option value="Tas">Tas</option>
+                    <option value="NT">NT</option>
+                    <option value="ACT">ACT</option>
+                </select>
+            </div>
+
+            <div class="filter-field" id="field-road-user" style="display: none;">
+                <label for="filter-road-user">Road User</label>
+                <select id="filter-road-user">
+                    <option value="All" selected>All Road Users</option>
+                    <option value="Car driver">Car driver</option>
+                    <option value="Car passenger">Car passenger</option>
+                    <option value="Motorcyclist">Motorcyclist</option>
+                    <option value="Pedal cyclist">Pedal cyclist</option>
+                    <option value="Pedestrian">Pedestrian</option>
+                    <option value="Bus occupant">Bus occupant</option>
+                    <option value="Pick-up truck or van occupant">Pick-up / Van occupant</option>
+                    <option value="Heavy transport driver">Heavy transport driver</option>
+                    <option value="Heavy transport passenger">Heavy transport passenger</option>
+                    <option value="Other or unknown">Other or unknown</option>
+                </select>
+            </div>
+
+            <div class="filter-field" id="field-metric">
+                <label for="filter-metric">Metric</label>
+                <select id="filter-metric">
+                    <option value="Hospitalised_Injuries" selected>Hospitalised Injuries</option>
+                    <option value="Bed_Days">Total Bed Days</option>
+                    <option value="Average_Bed_Days">Average Bed Days</option>
+                </select>
+            </div>
+
+            <div class="filter-action">
+                <button id="btn-reset-filters" type="button">Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <!-- View 1: State & National Trends -->
+        <div id="view-overview" class="view-section active">
+            <!-- Dynamic Key Finding Banner (Storytelling & Audience Takeaway) -->
+            <div class="finding-bar" id="state-key-finding" role="status" aria-live="polite">
+                <strong>Key Finding:</strong> Loading state hospitalisation insights...
+            </div>
+
+            <!-- Summary Metrics -->
+            <div class="summary-row">
+                <div class="summary-card">
+                    <div>
+                        <div class="summary-title">Hospitalised Injuries</div>
+                        <div class="summary-sub" id="kpi-injuries-sub">2011–2021 cumulative total</div>
+                    </div>
+                    <div class="summary-value" id="kpi-total-injuries">--</div>
+                </div>
+                <div class="summary-card">
+                    <div>
+                        <div class="summary-title">Total Bed Days</div>
+                        <div class="summary-sub" id="kpi-beddays-sub">Total hospital stay burden</div>
+                    </div>
+                    <div class="summary-value" id="kpi-total-beddays">--</div>
+                </div>
+                <div class="summary-card">
+                    <div>
+                        <div class="summary-title">Average Number of Bed Days</div>
+                        <div class="summary-sub" id="kpi-avg-sub">Weighted average per admission</div>
+                    </div>
+                    <div class="summary-value" id="kpi-avg-beddays">--</div>
+                </div>
+            </div>
+
+            <!-- 2x2 Charts Grid -->
+            <div class="chart-grid">
+                <!-- Chart 1: Trend (with Trend View Mode inside its header) -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-chart-1">Annual Hospitalised Injuries, 2011–2021</h2>
+                        <div class="chart-controls">
+                            <select id="filter-trend-mode" class="chart-select" aria-label="Trend View Mode">
+                                <option value="single" selected>Single Line</option>
+                                <option value="multi">Compare 8 States</option>
+                                <option value="indexed">% Change Since 2011</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="trend-timeline year-timeline" role="group" aria-label="State and national trends year range">
+                        <button id="btn-timeline-play" class="timeline-play-btn" type="button" aria-label="Play trend timeline">Play</button>
+                        <label class="sr-only" for="trend-year-slider">Choose trend year</label>
+                        <input id="trend-year-slider" type="range" min="2011" max="2021" step="1" value="2011" aria-label="Choose trend year" aria-controls="chart-1" aria-valuetext="All years">
+                        <output id="trend-year-output" for="trend-year-slider" aria-live="polite">All years</output>
+                        <span class="timeline-range-label" aria-hidden="true">2011–2021</span>
+                    </div>
+                    <div id="chart-1" class="chart-area"></div>
+                </div>
+
+                <!-- Chart 2: State Bar Chart (with Sort & Raw/% Share inside its header) -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-chart-2">Hospitalised Injuries by State (2011–2021)</h2>
+                        <div class="chart-controls">
+                            <select id="filter-sort" class="chart-select" aria-label="Sort States By">
+                                <option value="value-desc" selected>Sort: High &rarr; Low</option>
+                                <option value="value-asc">Sort: Low &rarr; High</option>
+                                <option value="alpha">Sort: A &ndash; Z</option>
+                            </select>
+                            <div class="inline-toggle" id="toggle-bar-mode">
+                                <button type="button" class="mini-btn active" data-barmode="raw">Count</button>
+                                <button type="button" class="mini-btn" data-barmode="share">% Share</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="chart-2" class="chart-area"></div>
+                </div>
+
+                <!-- Chart 3: Average Bed Days by State -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-chart-3">Average Bed Days by State (2011–2021)</h2>
+                        <span class="chart-hint">Dashed line = National average</span>
+                    </div>
+                    <div id="chart-3" class="chart-area"></div>
+                </div>
+
+                <!-- Chart 4: State Share Treemap -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-chart-4">State Injury Share Treemap (2011–2021)</h2>
+                        <span class="chart-hint">Tile area = injury count · click to filter</span>
+                    </div>
+                    <div id="chart-4" class="chart-area"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Teammates' Section (Demographics, Remoteness & Road Users) -->
+        <div id="view-demographics" class="view-section">
+            <div class="trend-timeline year-timeline" role="group" aria-label="Demographics year range">
+                <span class="timeline-section-label">Demographics year</span>
+                <button class="timeline-play-btn" type="button" aria-label="Play demographics timeline">Play</button>
+                <label class="sr-only" for="demographics-year-slider">Choose demographics year</label>
+                <input id="demographics-year-slider" type="range" min="2011" max="2021" step="1" value="2011" aria-label="Choose demographics year" aria-valuetext="All years">
+                <output aria-live="polite">All years</output>
+                <span class="timeline-range-label" aria-hidden="true">2011–2021</span>
+            </div>
+            <div class="chart-grid">
+                <!-- 1: Road User -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-demo-1">Injuries by Road User (2011–2021)</h2>
+                        <span class="chart-hint">Top road user groups</span>
+                    </div>
+                    <div id="chart-road-user" class="chart-area"></div>
+                </div>
+
+                <!-- 2: Remoteness -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-demo-2">Share by Remoteness Area (2011–2021)</h2>
+                        <span class="chart-hint">Major Cities vs Regional &amp; Remote</span>
+                    </div>
+                    <div id="chart-remoteness" class="chart-area"></div>
+                </div>
+
+                <!-- 3: Age Group -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-demo-3">Injuries by Age Group (2011–2021)</h2>
+                        <span class="chart-hint">Distribution across age brackets</span>
+                    </div>
+                    <div id="chart-age" class="chart-area"></div>
+                </div>
+
+                <!-- 4: Sex -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-demo-4">Injuries by Sex (2011–2021)</h2>
+                        <span class="chart-hint">Male vs Female comparison</span>
+                    </div>
+                    <div id="chart-sex" class="chart-area"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 3: First Nations Insights -->
+        <div id="view-first-nations" class="view-section">
+            <div class="finding-bar" id="fn-key-finding" role="status" aria-live="polite">
+                <strong>Key Finding:</strong> Loading First Nations hospitalisation insights...
+            </div>
+            <div class="trend-timeline year-timeline" role="group" aria-label="First Nations year range">
+                <span class="timeline-section-label">First Nations year</span>
+                <button class="timeline-play-btn" type="button" aria-label="Play First Nations timeline">Play</button>
+                <label class="sr-only" for="first-nations-year-slider">Choose First Nations year</label>
+                <input id="first-nations-year-slider" type="range" min="2011" max="2021" step="1" value="2011" aria-label="Choose First Nations year" aria-valuetext="All years">
+                <output aria-live="polite">All years</output>
+                <span class="timeline-range-label" aria-hidden="true">2011–2021</span>
+            </div>
+            <div class="chart-grid">
+                <!-- 1: Trend Line Chart -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-fn-1">First Nations vs Non-Indigenous Trend (2011–2021)</h2>
+                        <span class="chart-hint">Annual hospitalisation trends</span>
+                    </div>
+                    <div id="fn-chart-trend" class="chart-area"></div>
+                </div>
+
+                <!-- 2: Remoteness Grouped Bar Chart -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-fn-2">First Nations Share by Remoteness Area</h2>
+                        <span class="chart-hint">Major Cities vs Regional &amp; Remote</span>
+                    </div>
+                    <div id="fn-chart-remoteness" class="chart-area"></div>
+                </div>
+
+                <!-- 3: Age Group Butterfly Chart -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-fn-3">Age Distribution: First Nations vs Non-Indigenous</h2>
+                        <span class="chart-hint">Share within each population · hover for counts</span>
+                    </div>
+                    <div id="fn-chart-age" class="chart-area"></div>
+                </div>
+
+                <!-- 4: Road User Bar Chart -->
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h2 id="title-fn-4">First Nations Injuries by Road User Type</h2>
+                        <span class="chart-hint">Top road user groups</span>
+                    </div>
+                    <div id="fn-chart-roaduser" class="chart-area"></div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- View 4: Glossary -->
+        <div id="view-glossary" class="view-section">
+            <div class="text-box">
+                <h2>Glossary &amp; Data Notes</h2>
+
+                <h3 style="font-size:13px;font-weight:700;color:#1f2937;margin:12px 0 6px;">Data Source</h3>
+                <p><strong>BITRE</strong> – Bureau of Infrastructure and Transport Research Economics.
+                   Hospitalised Injury Data (2011–2021), Australian Road Traffic dataset.
+                   All figures represent cases where a road-crash victim was admitted to hospital
+                   (not merely treated at an emergency department and discharged).</p>
+
+                <h3 style="font-size:13px;font-weight:700;color:#1f2937;margin:12px 0 6px;">Key Metric Definitions</h3>
+                <p><strong>Hospitalised Injuries:</strong> The total number of people admitted to hospital as a result of a road traffic crash injury in the reference period.</p>
+                <p><strong>Total Bed Days:</strong> The cumulative number of nights patients spent in hospital across all admissions. A higher figure indicates greater overall burden on the health system.</p>
+                <p><strong>Average Bed Days (per admission):</strong> Total Bed Days divided by the number of Hospitalised Injuries. This is a proxy for injury severity — a higher average means patients were more seriously hurt and required longer recovery in hospital.</p>
+
+                <h3 style="font-size:13px;font-weight:700;color:#1f2937;margin:12px 0 6px;">Demographic &amp; Geographic Breakdowns</h3>
+                <p><strong>Road User Type:</strong> The role of the injured person in the crash (e.g., Car driver, Motorcyclist, Pedestrian). Categories come directly from BITRE classification.</p>
+                <p><strong>ABS Remoteness Area:</strong> Geographic classification from the Australian Bureau of Statistics (ABS) ASGS Remoteness Structure — Major Cities, Regional, Remote, and Very Remote. Reflects accessibility to services rather than population density alone.</p>
+                <p><strong>Age Group:</strong> Grouped age brackets as reported in the BITRE dataset (0–7, 8–16, 17–25, 26–39, 40–64, 65–74, 75+).</p>
+                <p><strong>Sex:</strong> Recorded sex of the injured person (Female, Male, Intersex or indeterminate or missing).</p>
+
+                <h3 style="font-size:13px;font-weight:700;color:#1f2937;margin:12px 0 6px;">Important Data Limitations</h3>
+                <p><strong>Population size differences:</strong> Direct comparison of raw injury counts across jurisdictions (e.g., NSW vs. Northern Territory) is misleading without accounting for population size. NSW has ~8× the population of the NT. Use the <em>% Change Since 2011</em> mode and <em>Average Bed Days</em> views to compare relative trends and injury severity fairly.</p>
+                <p><strong>Year-on-year variation:</strong> The 2020 data reflects the impact of COVID-19 travel restrictions, which significantly reduced road traffic volumes and, consequently, crash numbers across all states. Treat 2020 figures with caution when making comparisons.</p>
+                <p><strong>Missing &amp; unknown categories:</strong> A small proportion of records have unknown road user type, age, or sex. These appear as "Missing" or "Unknown" in the demographic charts and are retained to preserve the total injury count.</p>
+
+                <h3 style="font-size:13px;font-weight:700;color:#1f2937;margin:12px 0 6px;">Methodology Notes</h3>
+                <p><strong>Weighted average bed days:</strong> The national and state average bed days shown in the KPI cards and Chart 3 are computed as a <em>weighted</em> average: Total Bed Days &divide; Total Hospitalised Injuries (not an arithmetic mean of per-year averages), ensuring that high-volume years do not distort the result.</p>
+                <p><strong>% Change Since 2011 (indexed mode):</strong> Each state's value in a given year is expressed relative to its own 2011 baseline: ((value &minus; baseline) &divide; baseline) &times; 100. This removes the effect of absolute size differences and highlights growth or decline patterns.</p>
+                <p><strong>Cross-chart filtering:</strong> Clicking any bar, slice, or data point will filter all charts on that tab simultaneously. Use the <em>Reset</em> button in the filter bar to clear all selections.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="d3-tooltip hidden"></div>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <p>COS30045 Data Visualisation &ndash; Group 20 (C2/T2)</p>
+        </div>
+    </footer>
+
+    <script src="js/constants.js"></script>
+    <script src="js/chart1.js"></script>
+    <script src="js/chart2.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/demographics.js"></script>
+    <script src="js/demographics-select.js"></script>
+    <script src="js/first_nations.js"></script>
+</body>
+</html>
